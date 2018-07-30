@@ -1,5 +1,6 @@
-package grails;
+package grails
 
+import com.vaadin.data.HasValue;
 import com.vaadin.ui.*;
 import grails.utils.Grails;
 import proyectofinalprogweb.Helado;
@@ -41,7 +42,12 @@ public class NewHelado extends Window {
         VerticalLayout main = new VerticalLayout();
 
         sabores.setItems(Grails.get(SaborService.class).allSabors());
-        sabores.setItemCaptionGenerator(Sabor::getName);
+        sabores.setItemCaptionGenerator(new ItemCaptionGenerator<Sabor>() {
+            @Override
+            String apply(Sabor item) {
+                return item.getName()
+            }
+        })
         main.addComponent(description);
         main.addComponent(precio);
         main.addComponent(sabores);
@@ -56,15 +62,17 @@ public class NewHelado extends Window {
                 helado.setDescripcion(description.getValue());
                 BigDecimal bdPrecio = new BigDecimal(precio.getValue().replace(",", ""));
                 helado.setPrecio(bdPrecio);
-                sabores.addValueChangeListener(event1 -> {
-                         if(event1.getValue().isEmpty()) {
-                             Notification.show("Debes elegir uno o mas sabores para el helado");
-                         } else {
-                             helado.setSabores(event1.getValue());
-                             Grails.get(HeladoService.class).createHelado(helado);
-                         }
-
-                });
+                sabores.addValueChangeListener(new HasValue.ValueChangeListener<Set<Sabor>>() {
+                    @Override
+                    void valueChange(HasValue.ValueChangeEvent<Set<Sabor>> event1) {
+                        if(event1.getValue().isEmpty()) {
+                            Notification.show("Debes elegir uno o mas sabores para el helado");
+                        } else {
+                            helado.setSabores(event1.getValue());
+                            Grails.get(HeladoService.class).createHelado(helado);
+                        }
+                    }
+                })
 
                 close();
             }
@@ -86,7 +94,7 @@ public class NewHelado extends Window {
         if (helado != null) {
             description.setValue(helado.getDescripcion() != null ? helado.getDescripcion() : "");
             precio.setValue(helado.getPrecio().toString());
-            sabores.setValue(helado.getSabores());
+            sabores.setValue(helado.sabores);
         }
     }
 }

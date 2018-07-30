@@ -6,7 +6,6 @@ import org.codehaus.groovy.util.HashCodeHelper
 
 
 class UserRole implements Serializable {
-    private static final long serialVersionUID = 1
 
     User user
     Role role
