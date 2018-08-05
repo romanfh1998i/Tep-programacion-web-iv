@@ -10,12 +10,16 @@ class User implements Serializable {
     String password
     boolean enabled = true
 
+    static hasMany = [role: Role]
+
     static constraints = {
         password blank: false, password: true
         username blank: false, unique: true
     }
-
-    Set<Role> getRoles() {
-        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    static mapping = {
+        role lazy: false
     }
+//    Set<Role> getRoles() {
+//        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+//    }
 }

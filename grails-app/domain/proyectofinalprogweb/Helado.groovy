@@ -7,10 +7,12 @@ class Helado {
 
     static hasMany = [sabores:Sabor]
 
-    static mapping = {
-    }
 
     static constraints = {
         descripcion unique: true
+    }
+
+    static mapping = {
+        sabores lazy: false
     }
 }

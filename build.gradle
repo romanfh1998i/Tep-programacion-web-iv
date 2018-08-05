@@ -70,6 +70,8 @@ dependencies {
     compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringVersion"
     compile "com.vaadin:vaadin-spring-boot:$vaadinSpringVersion"
     compile "com.vaadin:vaadin-push:$vaadinVersion"
+    compile group: 'com.vaadin', name: 'vaadin-compatibility-server', version: '8.4.2'
+   
 }
 
 vaadin {

@@ -35,8 +35,8 @@ public class RegisterUI extends VerticalLayout implements View {
                       (password.getValue().length()<2) &&
                       (name.getValue().length()<2))) {
 
-                    User user = Grails.get(UserService.class).registerUser(username.getValue(), name.getValue(), password.getValue());
-                    UserRole.create(user,Grails.get(RoleService.class).findRole("USER"));
+                    Grails.get(UserService.class).registerUser(username.getValue(), name.getValue(), password.getValue());
+
 
                     getUI().getNavigator().addView(LoginPage.NAME, LoginPage.class);
                     Page.getCurrent().setUriFragment("!" + LoginPage.NAME);

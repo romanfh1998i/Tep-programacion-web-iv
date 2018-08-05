@@ -27,7 +27,7 @@ public class SaborUI extends VerticalLayout implements View {
         addComponent(panel);
         FormLayout content = new FormLayout();
         TextField name = new TextField("Name");
-
+        logout = new Button("Logout");
         List<String> colores = new ArrayList<>();
         colores.add("Rosa");
         colores.add("Amarillo");
@@ -70,7 +70,8 @@ public class SaborUI extends VerticalLayout implements View {
             }
         });
 
-        User user = (User) getSession().getAttribute("user");
+        String username = VaadinSession.getCurrent().getAttribute("user").toString();
+        User user = Grails.get(UserService.class).findUser(username);
         if(user !=null){
             currentUser = new Label("");
             addComponent(currentUser);

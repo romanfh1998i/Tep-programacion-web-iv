@@ -5,7 +5,9 @@ class Sabor {
     String name
 
     static mapping = {
+
     }
+
     static constraints = {
         name blank: false
     }

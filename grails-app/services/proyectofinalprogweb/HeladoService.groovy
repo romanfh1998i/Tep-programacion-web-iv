@@ -1,6 +1,7 @@
 package proyectofinalprogweb
 
 import grails.gorm.transactions.Transactional
+import grails.utils.SaborUI
 
 @Transactional
 class HeladoService {
@@ -8,7 +9,9 @@ class HeladoService {
     def serviceMethod() {
 
     }
-    void createHelado(Helado helado) {
+    void createHelado(Helado helado, Set<Sabor>sabores) {
+        for(Sabor sabor: sabores)
+            helado.addToSabores(sabor)
         helado.save(flush: true, failOnError: true)
     }
 

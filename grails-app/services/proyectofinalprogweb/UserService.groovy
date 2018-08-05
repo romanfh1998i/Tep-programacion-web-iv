@@ -14,9 +14,13 @@ class UserService {
     }
 
     User findUser(String username, String password){
-       return User.findByUsernameAndPassword(user, password)
+       return User.findByUsernameAndPassword(username, password)
     }
 
+    User findUser(String username)
+    {
+        return User.findByUsername(username);
+    }
     List<User> allUsers() {
         return User.findAll()
     }
@@ -31,9 +35,15 @@ class UserService {
 
     User registerUser(String username, String name, String password) {
         User user = new User()
+        user.addToRole(new Role(role: "USER"))
         user.name = name
         user.username = username
         user.password = password
         return user.save(flush: true, failOnError: true)
+    }
+
+    Set <Role> getRoles (String username){
+        User user = User.findByUsername(username)
+        return  user.role
     }
 }

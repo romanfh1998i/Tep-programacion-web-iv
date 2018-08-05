@@ -7,7 +7,6 @@ import com.vaadin.ui.*;
 import grails.utils.Grails;
 import grails.utils.HeladoUI;
 import grails.utils.RegisterUI;
-import proyectofinalprogweb.Helado;
 import proyectofinalprogweb.User;
 import proyectofinalprogweb.UserService;
 
@@ -43,10 +42,9 @@ public class LoginPage extends VerticalLayout implements View {
             public void buttonClick(Button.ClickEvent event) {
                 User user = Grails.get(UserService.class).findUser(username.getValue(), password.getValue());
                 if (user!=null) {
-                    VaadinSession.getCurrent().setAttribute("user", user);
+                    VaadinSession.getCurrent().setAttribute("user", username.getValue());
                     getUI().getNavigator().addView(HeladoUI.NAME, HeladoUI.class);
-                    Page.getCurrent().setUriFragment("!" + HeladoUI.NAME);
-
+                    Page.getCurrent().setUriFragment("!Helado");
                 } else {
                     Notification.show("Invalid credentials", Notification.Type.ERROR_MESSAGE);
                 }

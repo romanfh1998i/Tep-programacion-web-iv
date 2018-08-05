@@ -16,27 +16,22 @@ class BootStrap {
         if(!sabores.isEmpty())
             createHelado("Helado--Ron_Pasta--Ciruela ", new BigDecimal(50), sabores )
 
-        Role role1 = createRole("ADMIN");
-        Role role2 = createRole("USER");
+        Role role1 = new Role(role:"ADMIN");
+        Role role2 = new Role(role:"USER");
+
         User user1 = createUser("ALuis Marte", "aluis",  "123")
+
         if(user1!=null)
         {
-            UserRole userRole = new UserRole();
-            userRole.setRole(role2);
-            userRole.setUser(user1);
-            userRole.save(flush: true, failOnError: true)
+            user1.addToRole(role2)
+            user1.save(flush: true, failOnError: true)
         }
         User user2 = createUser("Roman Franco Ho","franco", "rfranco")
         if(user2!=null)
         {
-            UserRole userRole = new UserRole();
-            userRole.setRole(role1);
-            userRole.setUser(user2);
-            userRole.save(flush: true, failOnError: true)
-            userRole = new UserRole();
-            userRole.setRole(role2);
-            userRole.setUser(user2);
-            userRole.save(flush: true, failOnError: true)
+            user2.addToRole(role1)
+            user2.addToRole(role2)
+            user2.save(flush: true, failOnError: true)
         }
 
     }
@@ -77,15 +72,5 @@ class BootStrap {
         return user
     }
 
-    private static Role createRole(String role) {
-        Role currentRole = Role.findByRole(role)
-        if (currentRole == null) {
-            currentRole = new Role()
-
-            currentRole.role = role
-
-            currentRole = currentRole.save(flush: true, failOnError: true)
-        }
-        return currentRole
-    }
+    
 }

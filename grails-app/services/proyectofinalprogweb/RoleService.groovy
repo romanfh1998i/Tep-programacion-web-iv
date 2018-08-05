@@ -5,8 +5,9 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class RoleService {
 
-    def serviceMethod() {
-
+    @Transactional
+    Set <Role> getAllRoleByUser (User user ) {
+        return Role.findAllByUser(user);
     }
     void createRole(Role role) {
         role.save(flush: true, failOnError: true)

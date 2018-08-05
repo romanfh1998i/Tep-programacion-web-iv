@@ -14,6 +14,8 @@ import elemental.html.IDBFactory;
 import grails.utils.HeladoUI;
 import grails.utils.RegisterUI;
 import grails.utils.SaborUI;
+import proyectofinalprogweb.Helado;
+import proyectofinalprogweb.Sabor;
 import proyectofinalprogweb.User;
 
 /**
@@ -32,9 +34,15 @@ public class AppUI extends UI {
     protected void init(VaadinRequest request) {
         new Navigator(this, this);
         setContent(mainLayout);
-
         getNavigator().addView(LoginPage.NAME, LoginPage.class);
+
         getNavigator().setErrorView(LoginPage.class);
+//        Page.getCurrent().addPopStateListener(new Page.PopStateListener() {
+//            @Override
+//            public void uriChanged(Page.PopStateEvent event) {
+//                router(event.getUri());
+//            }
+//        });
         Page.getCurrent().addUriFragmentChangedListener(new Page.UriFragmentChangedListener() {
             @Override
             public void uriFragmentChanged(Page.UriFragmentChangedEvent event) {
@@ -47,15 +55,17 @@ public class AppUI extends UI {
     private void router(String route) {
         Notification.show(route);
         if (getSession().getAttribute("user") != null) {
+            System.out.println("There");
             getNavigator().addView(HeladoUI.NAME, HeladoUI.class);
+            getNavigator().addView(SaborUI.NAME, SaborUI.class);
             if (route.equals("!Sabor")) {
                 getNavigator().navigateTo(SaborUI.NAME);
-            } else if (route.equals("!Helado")) {
+            } else {
                 getNavigator().navigateTo(HeladoUI.NAME);
             }
         } else {
             getNavigator().addView(RegisterUI.NAME, RegisterUI.class);
-            getNavigator().navigateTo(LoginPage.NAME);
+            //getNavigator().navigateTo(LoginPage.NAME);
             if(route.equals("!Register")){
                 getNavigator().navigateTo(RegisterUI.NAME);
             }

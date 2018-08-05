@@ -7,9 +7,9 @@ import groovy.transform.ToString
 class Role implements Serializable  {
 
     String role
+    static belongsTo = [user: User]
 
-    static constraints = {
-        role blank: false, unique: true
-
+    static mapping = {
+        user lazy: false
     }
 }

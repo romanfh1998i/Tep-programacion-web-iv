@@ -7,6 +7,9 @@ import proyectofinalprogweb.Helado;
 import proyectofinalprogweb.HeladoService;
 import proyectofinalprogweb.Sabor;
 import proyectofinalprogweb.SaborService;
+import java.math.BigDecimal;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 
 import java.math.BigDecimal;
@@ -19,7 +22,7 @@ import java.util.Set;
 public class NewHelado extends Window {
 
 
-    private TextArea description = new TextArea("Descripcion");
+    private TextArea descripcion = new TextArea("Descripcion");
     private TextField precio = new TextField("Precio");
     private CheckBoxGroup<Sabor> sabores= new CheckBoxGroup<Sabor>("Sabores");
 
@@ -48,7 +51,7 @@ public class NewHelado extends Window {
                 return item.getName()
             }
         })
-        main.addComponent(description);
+        main.addComponent(descripcion);
         main.addComponent(precio);
         main.addComponent(sabores);
 
@@ -59,20 +62,26 @@ public class NewHelado extends Window {
                     helado = new Helado();
                 }
 
-                helado.setDescripcion(description.getValue());
-                BigDecimal bdPrecio = new BigDecimal(precio.getValue().replace(",", ""));
+                helado.setDescripcion(descripcion.getValue())
+                BigDecimal bdPrecio = stringToBigDecimal(precio.getValue(), Locale.ENGLISH)
                 helado.setPrecio(bdPrecio);
+                Set<Sabor> sabors = new HashSet();
                 sabores.addValueChangeListener(new HasValue.ValueChangeListener<Set<Sabor>>() {
                     @Override
                     void valueChange(HasValue.ValueChangeEvent<Set<Sabor>> event1) {
+
+
                         if(event1.getValue().isEmpty()) {
                             Notification.show("Debes elegir uno o mas sabores para el helado");
                         } else {
-                            helado.setSabores(event1.getValue());
-                            Grails.get(HeladoService.class).createHelado(helado);
+                            Notification.show("Seleccionando");
+                            sabors= event1.getValue();
+
                         }
                     }
                 })
+
+                Grails.get(HeladoService.class).createHelado(helado, sabors);
 
                 close();
             }
@@ -96,5 +105,44 @@ public class NewHelado extends Window {
             precio.setValue(helado.getPrecio().toString());
             sabores.setValue(helado.sabores);
         }
+    }
+    private static BigDecimal stringToBigDecimal(final String formattedString,
+                                                 final Locale locale)
+    {
+        final DecimalFormatSymbols symbols;
+        final char                 groupSeparatorChar;
+        final String               groupSeparator;
+        final char                 decimalSeparatorChar;
+        final String               decimalSeparator;
+        String                     fixedString;
+        final BigDecimal           number;
+
+        symbols              = new DecimalFormatSymbols(locale);
+        groupSeparatorChar   = symbols.getGroupingSeparator();
+        decimalSeparatorChar = symbols.getDecimalSeparator();
+
+        if(groupSeparatorChar == '.')
+        {
+            groupSeparator = "\\" + groupSeparatorChar;
+        }
+        else
+        {
+            groupSeparator = Character.toString(groupSeparatorChar);
+        }
+
+        if(decimalSeparatorChar == '.')
+        {
+            decimalSeparator = "\\" + decimalSeparatorChar;
+        }
+        else
+        {
+            decimalSeparator = Character.toString(decimalSeparatorChar);
+        }
+
+        fixedString = formattedString.replaceAll(groupSeparator , "");
+        fixedString = fixedString.replaceAll(decimalSeparator , ".");
+        number      = new BigDecimal(fixedString);
+
+        return (number);
     }
 }
